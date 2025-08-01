@@ -1,0 +1,70 @@
+{
+  "input": {
+    "api_response": {
+      "status": "success",
+      "payload": "{\"user\":{\"id\":123,\"name\":\"John Doe\",\"email\":\"john@example.com\"},\"settings\":{\"theme\":\"light\",\"language\":\"en\"}}",
+      "metadata": "{\"timestamp\":\"2023-12-01T10:00:00Z\",\"version\":\"v1.2.3\"}"
+    },
+    "config": {
+      "app_name": "MyApp",
+      "features": "{\"feature_a\":true,\"feature_b\":false,\"limits\":{\"max_users\":1000,\"max_requests\":5000}}"
+    }
+  },
+  "chainr_spec": [
+    {
+      "operation": "com.bazaarvoice.jolt.JsonStringParseTransform",
+      "spec": {
+        "fields": ["api_response.payload", "api_response.metadata", "config.features"]
+      }
+    },
+    {
+      "operation": "shift",
+      "spec": {
+        "api_response": {
+          "status": "result.status",
+          "payload": {
+            "user": {
+              "id": "result.user.user_id",
+              "name": "result.user.full_name",
+              "email": "result.user.email_address"
+            },
+            "settings": "result.user.preferences"
+          },
+          "metadata": {
+            "timestamp": "result.created_at",
+            "version": "result.api_version"
+          }
+        },
+        "config": {
+          "app_name": "result.application",
+          "features": "result.feature_flags"
+        }
+      }
+    }
+  ],
+  "expected": {
+    "result": {
+      "status": "success",
+      "user": {
+        "user_id": 123,
+        "full_name": "John Doe",
+        "email_address": "john@example.com",
+        "preferences": {
+          "theme": "light",
+          "language": "en"
+        }
+      },
+      "created_at": "2023-12-01T10:00:00Z",
+      "api_version": "v1.2.3",
+      "application": "MyApp",
+      "feature_flags": {
+        "feature_a": true,
+        "feature_b": false,
+        "limits": {
+          "max_users": 1000,
+          "max_requests": 5000
+        }
+      }
+    }
+  }
+}

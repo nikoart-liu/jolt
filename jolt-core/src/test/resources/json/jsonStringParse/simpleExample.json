@@ -1,0 +1,55 @@
+{
+  "input": {
+    "user": {
+      "name": "Alice",
+      "profile": "{\"age\":25,\"city\":\"New York\",\"preferences\":{\"theme\":\"dark\",\"notifications\":true}}"
+    },
+    "response": {
+      "status": "success",
+      "data": "{\"items\":[{\"id\":1,\"name\":\"Product A\"},{\"id\":2,\"name\":\"Product B\"}],\"total\":2}"
+    },
+    "metadata": {
+      "version": "1.0",
+      "config": "{\"debug\":true,\"timeout\":5000}"
+    }
+  },
+  "spec": {
+    "fields": ["user.profile", "response.data", "metadata.config"]
+  },
+  "expected": {
+    "user": {
+      "name": "Alice",
+      "profile": {
+        "age": 25,
+        "city": "New York",
+        "preferences": {
+          "theme": "dark",
+          "notifications": true
+        }
+      }
+    },
+    "response": {
+      "status": "success",
+      "data": {
+        "items": [
+          {
+            "id": 1,
+            "name": "Product A"
+          },
+          {
+            "id": 2,
+            "name": "Product B"
+          }
+        ],
+        "total": 2
+      }
+    },
+    "metadata": {
+      "version": "1.0",
+      "config": {
+        "debug": true,
+        "timeout": 5000
+      }
+    }
+  }
+}
